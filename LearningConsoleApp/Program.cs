@@ -9,7 +9,9 @@ using static System.String;
     Console.WriteLine("Enter last name:");
     var lastName = Console.ReadLine() ?? "";
     if (new[] { firstName, lastName }.Any(IsNullOrWhiteSpace))
+    {
         throw new Exception("Both first name and last name must be provided.");
+    }
 
     return (firstName, lastName);
 }
@@ -26,15 +28,20 @@ DateTime AskBirthday()
     Console.WriteLine($"Enter birthday {format}:");
     var birthday = Console.ReadLine();
     if (IsNullOrWhiteSpace(birthday))
+    {
         // TODO: Better exception for this?
         throw new Exception("Birthday must be provided.");
+    }
 
     return DateTime.ParseExact(birthday.Trim(), format, new CultureInfo("en-US"));
 }
 
 void WriteBirthday(DateTime birthday)
 {
-    if (birthday.Year == 1992) Console.Beep();
+    if (birthday.Year == 1992)
+    {
+        Console.Beep();
+    }
 
     var birthdayDaysAgo = (DateTime.Now - birthday).Days;
     Console.WriteLine($"Your birthday is {birthday:D}, which was {birthdayDaysAgo:N0} days ago.");
@@ -55,7 +62,10 @@ int AskPath()
 {
     Console.WriteLine("Enter path to take (1 or 2):");
     var path = int.Parse(Console.ReadLine() ?? "");
-    if (!new[] { 1, 2 }.Contains(path)) throw new Exception("Path must be 1 or 2.");
+    if (!new[] { 1, 2 }.Contains(path))
+    {
+        throw new Exception("Path must be 1 or 2.");
+    }
 
     return path;
 }
