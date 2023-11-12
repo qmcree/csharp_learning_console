@@ -23,7 +23,10 @@ public class UserFileRepository
         deserializedUsers.Add(user.ToDict());
 
         file.SetLength(0); // Overwrite file.
-        JsonSerializer.Serialize(file, deserializedUsers);
+        JsonSerializer.Serialize(file, deserializedUsers, new JsonSerializerOptions
+        {
+            WriteIndented = true
+        });
         Console.WriteLine($"Stored user to path '{file.Name}'.");
     }
 

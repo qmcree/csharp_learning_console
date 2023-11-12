@@ -1,10 +1,11 @@
 using LearningConsoleApp.User;
+using LearningConsoleApp.User.Model;
 
 namespace LearningConsoleApp;
 
 public class CommandRouter
 {
-    private static readonly Dictionary<int, (string, string)> CommandIdsToMethods = new()
+    private static readonly Dictionary<int, (string description, string methodName)> CommandIdsToMethods = new()
     {
         { 1, ("Store new user", "StoreUser") },
         { 2, ("Fetch user by ID", "LoadUserById") },
@@ -17,7 +18,7 @@ public class CommandRouter
         if (!CommandIdsToMethods.TryGetValue(enteredCommandNumber, out var mappedCommand))
             throw new Exception($"Command '{enteredCommandNumber}' is not valid.");
 
-        var methodName = mappedCommand.Item2;
+        var methodName = mappedCommand.methodName;
         var method = GetType().GetMethod(methodName);
         if (method is null) throw new Exception($"Method '{methodName}' is not defined.");
 
@@ -30,7 +31,7 @@ public class CommandRouter
         Console.WriteLine("---[ Commands ]---");
         Console.WriteLine("------------------");
         foreach (var (commandNumber, descriptionMethod) in CommandIdsToMethods)
-            Console.WriteLine($"\t{commandNumber}.) {descriptionMethod.Item1}");
+            Console.WriteLine($"\t{commandNumber}.) {descriptionMethod.description}");
 
         Console.Write("What do you want to do?");
         return int.Parse(Console.ReadLine() ?? "");
@@ -41,6 +42,32 @@ public class CommandRouter
         var userRepository = new UserFileRepository();
         var user = new UserInterpreter().InterpretUser();
         var outputter = new UserOutputter(user);
+
+        switch (user)
+        {
+            case Administrator { FirstName: "hello" }:
+                Console.WriteLine("first name is hello");
+                break;
+
+            case Administrator:
+                Console.WriteLine("yippee");
+                break;
+
+            default:
+                Console.WriteLine("hi");
+                break;
+        }
+
+        var me = user switch
+        {
+            Administrator { FirstName: "hello" } bubba => bubba + "adfasd",
+            Administrator bubba => bubba + "yuiepe",
+            var bubba => "hi"
+        };
+
+        if (user is Administrator or Agent)
+        {
+        }
 
         userRepository.Store(user);
         outputter.WriteAll();
